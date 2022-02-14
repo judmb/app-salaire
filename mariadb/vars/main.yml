@@ -1,0 +1,7 @@
+---
+# vars file for mariadb
+mysql_dbname: "appsalaire"
+webserver_host: "192.168.56.108"
+db_host: "192.168.56.108"
+default_root_password: ""
+root_password: ""

@@ -1,0 +1,93 @@
+---
+# tasks file for apache
+
+- name: Installation de epel-release
+  yum:
+    name: epel-release
+    state: present
+
+- name: installation apache et  php pour OS Debian (last version)
+  apt:
+    name: ['apache2', 'php', 'php-mysql']
+    state: present
+    update_cache: yes
+  when: ansible_facts['os_family'] == "Debian"
+
+- name: installation extra packages (OS Famille Debian)
+  apt:
+    name: "{{ extra_packages_debian }}"
+    state: present
+  when: ansible_facts['os_family'] == "Debian" and extra_packages_debian is defined
+
+- name: Installation apache and php pour OS Famille Redhat (last version)
+  yum:
+    name: ['httpd', 'php', 'php-mysqlnd']
+    state: present
+    update_cache: yes
+  when: ansible_facts['os_family'] == "RedHat"
+ 
+- name: installation extra packages (OS Fammile RedHat)
+  yum:
+    name: "{{ extra_packages_redhat }}"
+    state: present
+  when: ansible_facts['os_family'] == "RedHat" and extra_packages_redhat is defined
+
+- name: Changement de droits du dossier /www/var/html
+  file:
+    path: /var/www/html
+    state: directory
+    mode: '0755'
+    recurse: yes
+
+- name: remove default index.html
+  file:
+    path: /var/www/html/index.html
+    state: absent
+
+- name: "Création des répertoires pour les hotes virtuels"
+  file:
+    path: "/etc/httpd/sites-{{ item }}"
+    state: directory 
+    mode: '0755'
+    owner: root
+    group: root
+  loop:
+    - enabled
+    - available
+
+- name: "Insertion de la ligne /etc/httpd/conf/httpd.conf dans le fichier nginx.conf"
+  lineinfile:
+    path: /etc/httpd/conf/httpd.conf
+    insertafter: "^IncludeOption"
+    line: "iIncludeOptional sites-enabled/*.conf" 
+
+- name: Copie de la source de app-salaire
+  copy:
+    src: app-php/db-data/
+    dest: /var/www/html/
+
+- name: Deploiement de la configuration de la base de données
+  template:
+    src: "db-config.php.j2"
+    dest: "/var/www/html/db-data/db-config.php"
+
+- name: Confirmation du demarrage du service apache (OS Famille Debian)
+  service:
+    name: apache2
+    state: started
+    enabled: yes
+  when: ansible_facts['os_family'] == "Debian"
+
+- name: Confirmation du demarrage du service apache (OS Famille RedHat)
+  service:
+    name: httpd
+    state: started
+    enabled: yes
+  when: ansible_facts['os_family'] == "RedHat"
+  
+- name: Desactiver Parefeu
+  systemd:
+   name: firewalld
+   enabled: no
+   state: restarted
+

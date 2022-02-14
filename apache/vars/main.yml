@@ -1,0 +1,9 @@
+---
+# vars file for apache
+mysql_dbname: "appsalaire"
+webserver_host: "192.168.56.108"
+db_host: "192.168.56.108"
+extra_packages_debian: ['php-curl', 'php-gd', 'php-mbstring'] 
+extra_packages_redhat: ['php-xml', 'php-gd', 'php-mbstring'] 
+mysql_user: "root"
+mysql_password: "rootroot"

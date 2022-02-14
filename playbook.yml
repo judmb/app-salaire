@@ -1,0 +1,6 @@
+
+- name: Installation de apache et Mariadb 
+  hosts: all
+  roles:
+    - apache 
+    - mariadb
