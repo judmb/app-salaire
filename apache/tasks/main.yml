@@ -69,7 +69,7 @@
 - name: Deploiement de la configuration de la base de données
   template:
     src: "db-config.php.j2"
-    dest: "/var/www/html/db-data/db-config.php"
+    dest: "/var/www/html/db-config.php"
 
 - name: Confirmation du demarrage du service apache (OS Famille Debian)
   service:
