@@ -59,7 +59,7 @@
   lineinfile:
     path: /etc/httpd/conf/httpd.conf
     insertafter: "^IncludeOption"
-    line: "iIncludeOptional sites-enabled/*.conf" 
+    line: "IncludeOptional sites-enabled/*.conf" 
 
 - name: Copie de la source de app-salaire
   copy:
