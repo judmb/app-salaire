@@ -44,22 +44,6 @@
     path: /var/www/html/index.html
     state: absent
 
-- name: "Création des répertoires pour les hotes virtuels"
-  file:
-    path: "/etc/httpd/sites-{{ item }}"
-    state: directory 
-    mode: '0755'
-    owner: root
-    group: root
-  loop:
-    - enabled
-    - available
-
-- name: "Insertion de la ligne /etc/httpd/conf/httpd.conf dans le fichier nginx.conf"
-  lineinfile:
-    path: /etc/httpd/conf/httpd.conf
-    insertafter: "^IncludeOption"
-    line: "IncludeOptional sites-enabled/*.conf" 
 
 - name: Copie de la source de app-salaire
   copy:
@@ -85,9 +69,13 @@
     enabled: yes
   when: ansible_facts['os_family'] == "RedHat"
   
-- name: Desactiver Parefeu
-  systemd:
-   name: firewalld
-   enabled: no
-   state: restarted
-
+- name: Ajout du service Apache au pare-feu
+#  systemd:
+#   name: firewalld
+#   enabled: no
+#   state: restarted
+  firewalld:
+   service: http
+   permanent: true
+   immediate: yes
+   state: enabled

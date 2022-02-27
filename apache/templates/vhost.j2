@@ -1,0 +1,11 @@
+# /etc/httpd/conf.d/00-www.app-salaire.fr.conf
+#
+# http://www.app-salaire.fr
+<VirtualHost *:80>
+  ServerAdmin info@microlinux.fr
+  DocumentRoot "/var/www/html"
+  ServerName www.app-salaire.fr
+  ServerAlias app-salaire.fr
+  ErrorLog logs/www.app-salaire.fr-error_log
+  CustomLog logs/www.app-salaire.fr-access_log common
+</VirtualHost>
