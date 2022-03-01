@@ -47,7 +47,7 @@
 
 - name: Copie de la source de app-salaire
   copy:
-    src: app-php/db-data/
+    src: app/
     dest: /var/www/html/
 
 - name: Deploiement de la configuration de la base de données
