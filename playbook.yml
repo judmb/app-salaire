@@ -1,5 +1,6 @@
 - name: Installation Appache et Mariadb  
   hosts: all
+  become: yes
   roles:
     - apache 
     - mariadb
